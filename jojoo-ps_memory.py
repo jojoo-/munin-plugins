@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 if len(sys.argv) == 2 and sys.argv[1] == "autoconf":
   print "no"
