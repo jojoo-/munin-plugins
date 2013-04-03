@@ -9,8 +9,6 @@ configure in /etc/munin/plugin-conf.d/munin-node
 and add for an example
 [jops_memory]
 env.names amavis slapd named mysqld httpd saslauthd
-
-
 '''
 
 import sys
@@ -49,9 +47,9 @@ else:
         #store result in dictionary result
         #first test if we already have a key, else add the value
         if searchproc not in result:
-          result[searchproc] = proc.get_memory_info()[1] #1 is rss, 2 is vms
+          result[searchproc] = proc.get_memory_info()[0] #0 is rss, 1 is vms
         else:
-          result[searchproc] += proc.get_memory_info()[1]
+          result[searchproc] += proc.get_memory_info()[0]
 
 
   #after the processing has finnished
