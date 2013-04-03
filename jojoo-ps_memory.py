@@ -35,6 +35,7 @@ else:
       if (compproc.find(searchproc) > 0):
         #store result in dictionary result
         #first test if we already have a key, else add the value
+        print "f",
         if searchproc not in result:
           result[searchproc] = proc.get_memory_info()[1] #1 is rss, 2 is vms
         else:
