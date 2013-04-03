@@ -1,21 +1,34 @@
 #!/usr/bin/env python
+''' munin plugin for multips_memory.
+twice as fast as the multips_memory
+
+depends on psutil;
+pip install psutil or apt-get install python-psutil
+
+configure in /etc/munin/plugin-conf.d/munin-node
+and add for an example
+[jops_memory]
+env.names amavis slapd named mysqld httpd saslauthd
+
+
+'''
+
 import sys
+from os import environ
+proclist= environ.get('names', 'init').split(' ')
 if len(sys.argv) == 2 and sys.argv[1] == "autoconf":
   print "no"
 elif len(sys.argv) == 2 and sys.argv[1] == "config":
   print 'graph_title RSS '
   print 'graph_vlabel Resident Set Size Memory'
   print 'graph_category processes'
+  for i in proclist:
+    print "%s.label %s" % (i, i)
   #print 
 
 else:
   from psutil import Process, process_iter, AccessDenied
-  from os import environ
-
-  
-  proclist= environ.get('names', 'init').split(' ')
   result = {}
-  #proclist = ("TextMate", "Chrome", "taskgated", )
 
   # go throu all processes, proc is the process we're examining
   for proc in process_iter():
@@ -35,7 +48,6 @@ else:
       if (compproc.find(searchproc) > 0):
         #store result in dictionary result
         #first test if we already have a key, else add the value
-        print "f",
         if searchproc not in result:
           result[searchproc] = proc.get_memory_info()[1] #1 is rss, 2 is vms
         else:
