@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This Plugin shows commits to etckeeper.
+Emphasis is on motivation to add custom messages and to commit often
+"""
 import sys
 import subprocess
 
@@ -8,6 +11,7 @@ import subprocess
 
 if 'config' in sys.argv:
     #if we have config specified as commandline option print out the config.
+    #read the munin docs to understand them
 
     print """graph_category etckeeper
 graph_title Commits to etckeeper
@@ -30,8 +34,10 @@ auto_commit.info The changes were checked in by etckeeper either via cron, or be
 """
 
 else:
-    #if we haven't config somewhere in the programm arguments
+    #if we haven't config somewhere in the programm arguments: run the program, print the field values
     
+    #try to run git log in etc. if any errors occur: exit
+
     try:
         log = subprocess.check_output(['git', 'log', 'oneline'], cwd='/etc/')
     except Exception, e:
@@ -51,7 +57,7 @@ else:
     custom_commit = 0
 
     for line in log.splitlines():
-        #print line
+        #the in operator should be fast. so i've heard.
         if ('daily autocommit' in line) or ('saving uncommitted changes in /etc' in line):
             auto_commit += 1
         elif 'committing changes in /etc after apt run' in line:
